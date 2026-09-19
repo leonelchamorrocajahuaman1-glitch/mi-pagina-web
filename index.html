@@ -191,6 +191,25 @@ heart.rotation.z = Math.PI; // la forma base sale invertida: se gira para que la
 scene.add(heart);
 scene.add(new THREE.PointLight(0xffd700, 1.2, 900));
 
+// Letra "N" dorada en el centro del corazón
+function letterTexture(letter) {
+  const c = document.createElement('canvas'); c.width = c.height = 256;
+  const ctx = c.getContext('2d');
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = "bold 185px Georgia, 'Times New Roman', serif";
+  ctx.shadowColor = '#FFD700'; ctx.shadowBlur = 34;
+  ctx.fillStyle = '#FFF6C9';
+  ctx.fillText(letter, 128, 136);
+  ctx.shadowBlur = 0;
+  ctx.strokeStyle = '#FFA500'; ctx.lineWidth = 3;
+  ctx.strokeText(letter, 128, 136);
+  return new THREE.CanvasTexture(c);
+}
+const LETTER_BASE = 44;
+const letterN = new THREE.Sprite(new THREE.SpriteMaterial({ map: letterTexture('N'), transparent: true, depthWrite: false }));
+letterN.scale.set(LETTER_BASE, LETTER_BASE, 1);
+scene.add(letterN);
+
 // Resplandor dorado pulsante
 function makeGlow(size, c1, c2) {
   const c = document.createElement('canvas'); c.width = c.height = size;
@@ -364,9 +383,11 @@ let t = 0;
   ring.rotation.z += 0.003;
   const gs = 1 + Math.sin(t * 0.4) * 0.03;
   glow.scale.set(GLOW_BASE * gs, GLOW_BASE * gs, 1);
-  const s = HEART_BASE * (1 + 0.06 * Math.sin(t * 3)); // latido del corazón
+  const hb = 1 + 0.06 * Math.sin(t * 3); // latido
+  const s = HEART_BASE * hb; // latido del corazón
   heart.scale.set(s, s, s);
   heart.rotation.y += 0.006; // giro suave para ver el wireframe 3D
+  letterN.scale.set(LETTER_BASE * hb, LETTER_BASE * hb, 1); // la N late junto al corazón
   textGroup.children.forEach((sp) => {
     sp.material.opacity = 0.8 + 0.2 * Math.sin(t * 2);
     sp.userData.theta += sp.userData.speed;
