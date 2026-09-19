@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Para Ti ❤️ — Una Galaxia de Amor</title>
-<meta name="description" content="Una galaxia romántica con corazón brillante, anillo de amor y frases flotando solo para ti.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
+<title>Feliz Día de las Flores Amarillas 🌻</title>
+<meta name="description" content="Una galaxia dorada con corazón amarillo, anillo de girasol y frases flotando por el Día de las Flores Amarillas.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌻</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   html, body {
-    margin: 0; height: 100%; background: #050208; overflow: hidden;
+    margin: 0; height: 100%; background: #000; overflow: hidden;
     -webkit-user-select: none; user-select: none;
     -webkit-tap-highlight-color: transparent;
     font-family: 'Indie Flower', 'Segoe Script', cursive;
@@ -21,14 +21,14 @@
 
   #main-title {
     position: fixed; top: 34px; left: 0; right: 0; width: 100%;
-    font-size: 2.4em; color: #ffd6e8; text-align: center;
-    text-shadow: 0 0 10px #ff4d88, 0 0 26px #ff1f6d, 0 0 46px #b3125f;
+    font-size: 2.4em; color: #FFFACD; text-align: center;
+    text-shadow: 0 0 10px #FFD700, 0 0 22px #FFA500, 0 0 44px #b8860b;
     z-index: 10; pointer-events: none; padding: 0 12px; line-height: 1.15;
   }
   @media (max-width: 768px) { #main-title { font-size: 1.5em; top: 20px; } }
 
   #start-screen {
-    position: fixed; inset: 0; background: radial-gradient(circle at 50% 40%, #1a0612 0%, #050208 70%);
+    position: fixed; inset: 0; background: #000;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     color: #fff; z-index: 9999; padding: 20px; cursor: pointer;
     transition: opacity .7s ease, visibility .7s ease;
@@ -36,7 +36,7 @@
   #start-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
   #start-heart {
     font-size: clamp(74px, 23vmin, 148px); line-height: 1;
-    filter: drop-shadow(0 0 14px rgba(255,77,136,.9)) drop-shadow(0 0 40px rgba(255,31,109,.5));
+    filter: drop-shadow(0 0 14px rgba(255,215,0,.85)) drop-shadow(0 0 40px rgba(255,165,0,.45));
     animation: latido 1.3s ease-in-out infinite; transform-origin: 50% 55%;
   }
   @keyframes latido {
@@ -47,8 +47,8 @@
     50% { transform: scale(1); }
   }
   #start-text {
-    font-size: 1.8em; color: #ffd6e8; text-align: center;
-    text-shadow: 0 0 8px #ff4d88; margin-top: clamp(16px, 3.5vh, 28px);
+    font-size: 1.8em; color: #FFFACD; text-align: center;
+    text-shadow: 0 0 8px #FFD700; margin-top: clamp(16px, 3.5vh, 28px);
     animation: parpadeo 2.2s ease-in-out infinite;
   }
   @keyframes parpadeo { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
@@ -60,16 +60,16 @@
   }
   #toolbar button {
     font-family: inherit; font-size: 1.05em; cursor: pointer;
-    color: #ffd6e8; background: rgba(255,31,109,.16);
-    border: 1px solid rgba(255,77,136,.6); border-radius: 999px;
+    color: #FFFACD; background: rgba(255,180,0,.14);
+    border: 1px solid rgba(255,215,0,.6); border-radius: 999px;
     padding: 8px 18px; backdrop-filter: blur(4px);
-    text-shadow: 0 0 6px #ff4d88;
+    text-shadow: 0 0 6px #FFD700;
   }
-  #toolbar button:hover { background: rgba(255,31,109,.32); }
+  #toolbar button:hover { background: rgba(255,180,0,.30); }
   #toolbar input[type="file"] { display: none; }
   #hint {
     position: fixed; bottom: 64px; left: 0; right: 0; z-index: 10; text-align: center;
-    color: rgba(255,214,232,.55); font-size: .95em; pointer-events: none;
+    color: rgba(255,250,205,.55); font-size: .95em; pointer-events: none;
   }
 </style>
 </head>
@@ -79,7 +79,7 @@
 <div id="hint">Arrastra para girar · Rueda o pellizca para acercar 💫</div>
 
 <div id="start-screen">
-  <div id="start-heart">❤️</div>
+  <div id="start-heart">🌻</div>
   <div id="start-text">Toca para iniciar</div>
 </div>
 
@@ -98,15 +98,15 @@
 <script>
 // ==================== CONFIGURA AQUÍ TU DEDICATORIA ====================
 const CONFIG = {
-  titulo: "Para Ti, Mi Amor ❤️",
+  titulo: "Feliz Día de las Flores Amarillas 🌻",
   frases: [
-    "❤️ Eres mi persona favorita", "💖 Contigo todo es mejor", "❤️ Gracias por existir",
-    "💕 Eres mi mejor casualidad", "❤️ Mi lugar favorito eres tú", "💖 Te quiero más cada día",
-    "❤️ Eres mi sol en días grises", "💕 Contigo el tiempo vuela", "❤️ Mi corazón te eligió a ti",
-    "💖 Eres mi sueño cumplido", "❤️ A tu lado todo brilla", "💕 Eres magia en mi vida",
-    "❤️ Te pienso a cada momento", "💖 Mi amor por ti no tiene fin", "❤️ Eres mi paz y mi locura",
-    "💕 Contigo quiero envejecer", "❤️ Eres mi principio y mi fin", "💖 Nada se compara contigo",
-    "❤️ Eres la razón de mi sonrisa", "💕 Mi universo entero eres tú"
+    "🌻 Como el girasol, siempre te busco", "🌼 Eres mi sol en cada mañana", "💛 Contigo florece todo",
+    "🌻 Tu sonrisa ilumina mi día", "🌼 Amarillo es mi color favorito desde que te conozco", "💛 Eres pura luz",
+    "🌻 Gracias por llenar mi vida de color", "🌼 Un girasol para la más bonita", "💛 Floreces en mi corazón",
+    "🌻 Eres mi primavera favorita", "🌼 Contigo cada día es soleado", "💛 Brillás más que mil soles",
+    "🌻 Mi flor amarilla preferida", "🌼 Que nunca te falten girasoles", "💛 Eres alegría en persona",
+    "🌻 Te quiero con todo mi sol", "🌼 Sos la luz de mis días", "💛 Florecer a tu lado es mi plan",
+    "🌻 Amarillo como este amor inmenso", "🌼 Para ti, todos mis girasoles"
   ]
 };
 // ======================================================================
@@ -120,17 +120,17 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.setSize(innerWidth, innerHeight);
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x0a0312, 0.0009);
+scene.fog = new THREE.FogExp2(0x0a0800, 0.0009);
 const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 5000);
 let targetDist = 300, currentDist = 300, rotX = 0.22, rotY = 0;
 
-// Estrellas (blancas + rosadas)
+// Estrellas (blancas + doradas)
 (function makeStars() {
   const count = 2200, spread = 3000;
   const g = new THREE.BufferGeometry();
   const pos = new Float32Array(count * 3);
   const col = new Float32Array(count * 3);
-  const palette = [[1,1,1],[1,.75,.87],[1,.55,.7],[.85,.6,1],[1,.9,.95]];
+  const palette = [[1,1,1],[1,.95,.8],[1,.85,.4],[1,.75,.2],[1,.98,.9]];
   for (let i = 0; i < count; i++) {
     const r = spread * (0.3 + Math.random() * 0.7);
     const th = Math.random() * Math.PI * 2;
@@ -146,14 +146,14 @@ let targetDist = 300, currentDist = 300, rotX = 0.22, rotY = 0;
   scene.add(new THREE.Points(g, new THREE.PointsMaterial({ size: 2, vertexColors: true, depthWrite: false })));
 })();
 
-// Nebulosa rosada de fondo (procedural, sin imágenes externas)
+// Nebulosa dorada tenue de fondo (procedural, sin imágenes externas)
 (function makeNebula() {
   const c = document.createElement('canvas'); c.width = c.height = 512;
   const g = c.getContext('2d');
-  const blobs = [[256,200,'255,31,109'],[150,300,'179,18,95'],[360,320,'255,120,170'],[256,120,'120,40,160']];
+  const blobs = [[256,200,'255,200,60'],[150,300,'150,90,10'],[360,320,'255,160,0'],[256,120,'120,70,0']];
   blobs.forEach(([x,y,rgb]) => {
     const grad = g.createRadialGradient(x,y,10,x,y,220);
-    grad.addColorStop(0, 'rgba(' + rgb + ',.30)');
+    grad.addColorStop(0, 'rgba(' + rgb + ',.22)');
     grad.addColorStop(1, 'rgba(0,0,0,0)');
     g.fillStyle = grad; g.fillRect(0,0,512,512);
   });
@@ -165,7 +165,7 @@ let targetDist = 300, currentDist = 300, rotX = 0.22, rotY = 0;
   scene.add(sky);
 })();
 
-// Corazón central wireframe AMARILLO (reemplaza al planeta)
+// Corazón central wireframe AMARILLO (enderezado: punta hacia abajo)
 function makeHeartShape() {
   const s = new THREE.Shape();
   s.moveTo(5, 5);
@@ -187,10 +187,11 @@ const heart = new THREE.LineSegments(
   new THREE.LineBasicMaterial({ color: 0xffd700, transparent: true, opacity: 0.95 })
 );
 heart.scale.set(HEART_BASE, HEART_BASE, HEART_BASE);
+heart.rotation.z = Math.PI; // la forma base sale invertida: se gira para que la punta quede abajo
 scene.add(heart);
 scene.add(new THREE.PointLight(0xffd700, 1.2, 900));
 
-// Resplandor dorado pulsante (a juego con el corazón amarillo)
+// Resplandor dorado pulsante
 function makeGlow(size, c1, c2) {
   const c = document.createElement('canvas'); c.width = c.height = size;
   const g = c.getContext('2d');
@@ -203,29 +204,29 @@ function makeGlow(size, c1, c2) {
 }
 const GLOW_BASE = 380;
 const glow = new THREE.Sprite(new THREE.SpriteMaterial({
-  map: makeGlow(768, '255,215,130', '255,170,0'), transparent: true, depthWrite: false
+  map: makeGlow(768, '255,225,130', '255,170,0'), transparent: true, depthWrite: false
 }));
 glow.scale.set(GLOW_BASE, GLOW_BASE, 1);
 scene.add(glow);
 
-// Anillo del amor (dorado-rosado, estilo Saturno)
+// Anillo dorado (estilo Saturno / girasol)
 function ringTexture(size) {
   size = size || 1024;
   const c = document.createElement('canvas'); c.width = c.height = size;
   const g = c.getContext('2d'); g.translate(size/2, size/2);
   const rIn = size * 0.205, rOut = size * 0.49;
   const grd = g.createRadialGradient(0,0,rIn,0,0,rOut);
-  grd.addColorStop(0.00, 'rgba(255,240,248,1)');
-  grd.addColorStop(0.30, 'rgba(255,170,205,1)');
-  grd.addColorStop(0.65, 'rgba(255,77,136,0.95)');
-  grd.addColorStop(1.00, 'rgba(200,20,90,0.85)');
+  grd.addColorStop(0.00, 'rgba(255,255,245,1)');
+  grd.addColorStop(0.30, 'rgba(255,235,120,1)');
+  grd.addColorStop(0.65, 'rgba(255,200,40,0.95)');
+  grd.addColorStop(1.00, 'rgba(255,160,0,0.85)');
   g.fillStyle = grd;
   g.beginPath(); g.arc(0,0,rOut,0,Math.PI*2); g.arc(0,0,rIn,0,Math.PI*2,true); g.closePath(); g.fill();
   for (let i = 0; i < 26; i++) {
     const r = rIn + (rOut - rIn) * (i / 25);
     g.beginPath(); g.arc(0,0,r,0,Math.PI*2);
     g.lineWidth = (rOut - rIn) / 26 * (0.55 + Math.random() * 0.35);
-    g.strokeStyle = (i % 3 === 0) ? 'rgba(120,10,50,0.22)' : 'rgba(255,235,245,0.18)';
+    g.strokeStyle = (i % 3 === 0) ? 'rgba(110,60,0,0.22)' : 'rgba(255,255,225,0.18)';
     g.stroke();
   }
   return new THREE.CanvasTexture(c);
@@ -237,7 +238,7 @@ const ring = new THREE.Mesh(
 ring.rotation.x = Math.PI / 2;
 scene.add(ring);
 
-// Frases flotantes
+// Frases flotantes (doradas)
 function makeTextTexture(text, color) {
   const c = document.createElement('canvas'); c.width = 512; c.height = 128;
   const ctx = c.getContext('2d');
@@ -249,7 +250,7 @@ function makeTextTexture(text, color) {
   ctx.fillText(text, 256, 64);
   return new THREE.CanvasTexture(c);
 }
-const COLORS = ['#ff4d88','#ff77aa','#ff99c0','#ffb3d1','#ff1f6d','#ff5c9d','#ffc2da','#e75480'];
+const COLORS = ['#ffd700','#ffe066','#ffcc33','#ffb347','#fff2b0','#ffaa00','#f4c430','#ffdb58'];
 const textGroup = new THREE.Group(); scene.add(textGroup);
 function populatePhrases() {
   document.fonts.load("40px 'Indie Flower'").catch(() => {}).then(() => {
@@ -267,25 +268,33 @@ function populatePhrases() {
 }
 populatePhrases();
 
-// Corazones flotantes (procedurales; se reemplazan por tus fotos si agregas)
-function drawHeartShape(ctx, s) {
-  ctx.beginPath();
-  ctx.moveTo(s/2, s*0.88);
-  ctx.bezierCurveTo(s*0.05, s*0.55, s*0.08, s*0.12, s*0.5, s*0.32);
-  ctx.bezierCurveTo(s*0.92, s*0.12, s*0.95, s*0.55, s/2, s*0.88);
-  ctx.closePath();
-}
-const photoGroup = new THREE.Group(); scene.add(photoGroup);
-function heartTexture() {
+// Girasoles flotantes (procedurales; se suman tus fotos si agregas)
+function flowerTexture() {
   const c = document.createElement('canvas'); c.width = c.height = 256;
   const ctx = c.getContext('2d');
-  const grad = ctx.createRadialGradient(128,110,10,128,128,150);
-  grad.addColorStop(0, '#ffd6e8'); grad.addColorStop(0.5, '#ff4d88'); grad.addColorStop(1, '#b3125f');
-  ctx.fillStyle = grad; ctx.shadowColor = '#ff1f6d'; ctx.shadowBlur = 30;
-  drawHeartShape(ctx, 256); ctx.fill();
+  ctx.translate(128, 128);
+  ctx.shadowColor = '#FFD700'; ctx.shadowBlur = 22;
+  for (let i = 0; i < 16; i++) {
+    ctx.save(); ctx.rotate((i / 16) * Math.PI * 2);
+    const g = ctx.createLinearGradient(0, 0, 0, -112);
+    g.addColorStop(0, '#ffdf40'); g.addColorStop(1, '#ff9500');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.ellipse(0, -70, 21, 52, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  const core = ctx.createRadialGradient(0, 0, 4, 0, 0, 36);
+  core.addColorStop(0, '#a06a10'); core.addColorStop(1, '#3d2400');
+  ctx.fillStyle = core;
+  ctx.beginPath(); ctx.arc(0, 0, 34, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = 'rgba(30,16,0,.8)';
+  for (let i = 0; i < 40; i++) {
+    const a = Math.random() * Math.PI * 2, r = Math.random() * 26;
+    ctx.beginPath(); ctx.arc(Math.cos(a)*r, Math.sin(a)*r, 2.2, 0, Math.PI * 2); ctx.fill();
+  }
   return new THREE.CanvasTexture(c);
 }
-const defaultHeartTex = heartTexture();
+const photoGroup = new THREE.Group(); scene.add(photoGroup);
+const defaultFlowerTex = flowerTexture();
 function orbitSprite(material, size) {
   const sp = new THREE.Sprite(material);
   sp.scale.set(size, size, 1);
@@ -297,22 +306,23 @@ function orbitSprite(material, size) {
   return sp;
 }
 for (let i = 0; i < 26; i++) {
-  orbitSprite(new THREE.SpriteMaterial({ map: defaultHeartTex, transparent: true }), 22 + Math.random() * 16);
+  orbitSprite(new THREE.SpriteMaterial({ map: defaultFlowerTex, transparent: true }), 22 + Math.random() * 16);
 }
 
-// Agregar tus fotos (flotan con marco de corazón)
+// Agregar tus fotos (flotan con marco dorado)
 function addPhotoFile(file) {
   const url = URL.createObjectURL(file);
   const img = new Image();
   img.onload = () => {
     const c = document.createElement('canvas'); c.width = c.height = 256;
     const ctx = c.getContext('2d');
-    ctx.save(); drawHeartShape(ctx, 256); ctx.clip();
+    ctx.save();
+    ctx.beginPath(); ctx.arc(128, 128, 112, 0, Math.PI * 2); ctx.clip();
     const s = Math.max(256 / img.width, 256 / img.height);
     ctx.drawImage(img, (256 - img.width*s)/2, (256 - img.height*s)/2, img.width*s, img.height*s);
     ctx.restore();
-    ctx.strokeStyle = '#ff77aa'; ctx.lineWidth = 10; ctx.shadowColor = '#ff1f6d'; ctx.shadowBlur = 24;
-    drawHeartShape(ctx, 256); ctx.stroke();
+    ctx.strokeStyle = '#ffcc33'; ctx.lineWidth = 10; ctx.shadowColor = '#ffaa00'; ctx.shadowBlur = 24;
+    ctx.beginPath(); ctx.arc(128, 128, 112, 0, Math.PI * 2); ctx.stroke();
     const tex = new THREE.CanvasTexture(c);
     orbitSprite(new THREE.SpriteMaterial({ map: tex, transparent: true }), 34 + Math.random() * 14);
   };
