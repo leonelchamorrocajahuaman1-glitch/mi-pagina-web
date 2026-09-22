@@ -563,6 +563,21 @@ for (let i = 0; i < FLOWER_COUNT; i++) {
   sp.scale.set(size, size, 1);
   placeOnSlot(sp, orbitSlot());
 }
+// Anillo de ramos alrededor del universo
+const bouquetRing = new THREE.Group(); scene.add(bouquetRing);
+bouquetRing.rotation.x = 0.15;
+(function makeBouquetRing() {
+  const N = 14;
+  for (let i = 0; i < N; i++) {
+    const a = (i / N) * Math.PI * 2;
+    const r = 280 + (Math.random() - 0.5) * 40;
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: bouquetTex, transparent: true }));
+    const s = 48 + Math.random() * 14;
+    sp.scale.set(s, s, 1);
+    sp.position.set(Math.cos(a) * r, -30 + Math.random() * 90, Math.sin(a) * r);
+    bouquetRing.add(sp);
+  }
+})();
 function addPhotoFile(file) {
   const url = URL.createObjectURL(file);
   const img = new Image();
@@ -628,6 +643,7 @@ let t = 0;
   ring1.rotation.z += 0.002;
   ring2.rotation.z -= 0.0015;
   spiral.rotation.y -= 0.0045;
+  bouquetRing.rotation.y += 0.0008; // el anillo de ramos orbita despacio
   dust.rotation.y += 0.0006;
   const gs = 1 + Math.sin(t * 0.4) * 0.03;
   glow.scale.set(450 * gs, 450 * gs, 1);
