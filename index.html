@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Feliz Día de las Flores Amarillas 🌻</title>
-<meta name="description" content="Una galaxia dorada con corazón de partículas, anillo brillante, girasoles y frases flotando por el Día de las Flores Amarillas.">
+<title>Te Amo 💛</title>
+<meta name="description" content="Te Amo: corazón dorado relleno de luz sobre una plataforma de polvo de estrellas, girasoles y frases flotando.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌻</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -83,11 +83,11 @@
     position: fixed; bottom: 84px; left: 0; right: 0; z-index: 10; text-align: center;
     color: rgba(255,250,205,.55); font-size: .95em; pointer-events: none;
   }
-  /* Ramo de flores decorativo abajo a la izquierda (como en la referencia) */
+  /* Ramo de flores decorativo abajo al centro (como en la referencia) */
   #bouquet {
-    position: fixed; left: 8px; bottom: 64px; z-index: 15; pointer-events: none;
-    font-size: 42px; line-height: 1.05; text-align: center;
-    filter: drop-shadow(0 0 10px rgba(255,180,0,.7));
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: 66px; z-index: 15; pointer-events: none;
+    font-size: 50px; line-height: 1.05; text-align: center;
+    filter: drop-shadow(0 0 12px rgba(255,180,0,.8));
     opacity: .95;
   }
 </style>
@@ -96,7 +96,7 @@
 <canvas id="c"></canvas>
 <h1 id="main-title"></h1>
 <div id="hint">Arrastra para girar · Rueda o pellizca para acercar 💫</div>
-<div id="bouquet">🌻🌻🌼<br>🌼🌻💛</div>
+<div id="bouquet">🌻🌻🌻<br>🌼🌻🌼</div>
 
 <div id="start-screen">
   <div id="start-heart">🌻</div>
@@ -118,7 +118,7 @@
 <script>
 // ==================== CONFIGURA AQUÍ TU DEDICATORIA ====================
 const CONFIG = {
-  titulo: "Feliz Día de las Flores Amarillas 🌻",
+  titulo: "Te Amo 💛",
   frases: [
     "🌻 Como el girasol, siempre te busco", "🌼 Eres mi sol en cada mañana", "💛 Contigo florece todo",
     "🌻 Tu sonrisa ilumina mi día", "🌼 Amarillo es mi color favorito desde que te conozco", "💛 Eres pura luz",
@@ -245,6 +245,43 @@ function heartCurve(t) {
     depthWrite: false, blending: THREE.AdditiveBlending
   })));
 })();
+// Relleno dorado denso dentro del corazón (como en la referencia)
+(function fillHeart() {
+  const HS = 2.3;
+  const poly = [];
+  for (let i = 0; i < 128; i++) poly.push(heartCurve((i / 128) * Math.PI * 2));
+  function inside(px, py) {
+    let c = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+      if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi)) c = !c;
+    }
+    return c;
+  }
+  const COUNT = 1400;
+  const pos = new Float32Array(COUNT * 3), col = new Float32Array(COUNT * 3);
+  let placed = 0, guard = 0;
+  while (placed < COUNT && guard++ < COUNT * 40) {
+    const px = -16 + Math.random() * 32, py = -17 + Math.random() * 30;
+    if (!inside(px, py)) continue;
+    pos[placed*3]   = px * HS;
+    pos[placed*3+1] = py * HS;
+    pos[placed*3+2] = (Math.random() - 0.5) * 9;
+    const c = pickGold();
+    const b = 0.7 + Math.random() * 0.3;
+    col[placed*3] = Math.min(1, c[0] * b + 0.15);
+    col[placed*3+1] = Math.min(1, c[1] * b + 0.1);
+    col[placed*3+2] = c[2] * b;
+    placed++;
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  heartGroup.add(new THREE.Points(g, new THREE.PointsMaterial({
+    size: 2.0, map: dotTex, vertexColors: true, transparent: true, opacity: 0.9,
+    depthWrite: false, blending: THREE.AdditiveBlending
+  })));
+})();
 scene.add(new THREE.PointLight(0xffd700, 1.2, 900));
 
 // Letra "N" dorada en el centro del corazón
@@ -262,7 +299,8 @@ function letterTexture(letter) {
   return new THREE.CanvasTexture(c);
 }
 const LETTER_BASE = 44;
-const letterN = new THREE.Sprite(new THREE.SpriteMaterial({ map: letterTexture('N'), transparent: true, depthWrite: false }));
+const letterN = new THREE.Sprite(new THREE.SpriteMaterial({ map: letterTexture('N'), transparent: true, depthWrite: false, depthTest: false }));
+letterN.renderOrder = 10; // la N brilla por encima del relleno dorado
 letterN.scale.set(LETTER_BASE, LETTER_BASE, 1);
 scene.add(letterN);
 
@@ -319,6 +357,49 @@ const dustRingSpeeds = [];
   });
 })();
 
+// Plataforma dorada: disco de polvo de estrellas bajo el corazón (como en la referencia)
+(function makeDisc() {
+  const RX = 145, RZ = 80, Y = -78;
+  const COUNT = 2600;
+  const pos = new Float32Array(COUNT * 3), col = new Float32Array(COUNT * 3);
+  for (let i = 0; i < COUNT; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const rr = Math.sqrt(Math.random());
+    pos[i*3]   = Math.cos(a) * rr * RX;
+    pos[i*3+1] = Y + (Math.random() - 0.5) * (4 + (1 - rr) * 10);
+    pos[i*3+2] = Math.sin(a) * rr * RZ;
+    const c = pickGold();
+    const bright = 0.5 + (1 - rr) * 0.6; // centro más brillante
+    col[i*3]   = Math.min(1, c[0] * bright);
+    col[i*3+1] = Math.min(1, c[1] * bright);
+    col[i*3+2] = Math.min(1, c[2] * bright);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({
+    size: 2.2, map: dotTex, vertexColors: true, transparent: true,
+    depthWrite: false, blending: THREE.AdditiveBlending
+  })));
+  // Dos aros elípticos brillantes sobre el disco
+  [1.0, 0.72].forEach((k) => {
+    const N = 700;
+    const p2 = new Float32Array(N * 3), c2 = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      const a = (i / N) * Math.PI * 2;
+      p2[i*3] = Math.cos(a) * RX * k; p2[i*3+1] = Y + 2; p2[i*3+2] = Math.sin(a) * RZ * k;
+      c2[i*3] = 1; c2[i*3+1] = 0.92; c2[i*3+2] = 0.6;
+    }
+    const gg = new THREE.BufferGeometry();
+    gg.setAttribute('position', new THREE.BufferAttribute(p2, 3));
+    gg.setAttribute('color', new THREE.BufferAttribute(c2, 3));
+    scene.add(new THREE.Points(gg, new THREE.PointsMaterial({
+      size: 2.6, map: dotTex, vertexColors: true, transparent: true,
+      depthWrite: false, blending: THREE.AdditiveBlending
+    })));
+  });
+})();
+
 // Frases flotantes (doradas)
 function makeTextTexture(text, color) {
   const c = document.createElement('canvas'); c.width = 512; c.height = 128;
@@ -348,6 +429,18 @@ function populatePhrases() {
   });
 }
 populatePhrases();
+
+// Textos dorados fijos sobre la plataforma (como en la referencia)
+function platformText(text, x, y, z, w) {
+  const tex = makeTextTexture(text, '#ffd700');
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true }));
+  sp.position.set(x, y, z);
+  sp.scale.set(w, w / 4, 1);
+  scene.add(sp);
+}
+platformText('MI FLOR AMARILLA 🌻', -72, -56, 40, 58);
+platformText('BRILLAS TANTO ✨', 72, -58, 30, 52);
+platformText('💛 TE AMO 💛', 0, -50, 58, 50);
 
 // Girasoles flotantes (procedurales; se suman tus fotos si agregas)
 function flowerTexture() {
@@ -396,6 +489,17 @@ for (let i = 0; i < 34; i++) {
   hero.scale.set(s, s, 1);
   scene.add(hero);
 });
+// Girasoles sobre la plataforma + uno en la punta del corazón (como en la referencia)
+[[-95, -66, 20, 34], [95, -66, 10, 36], [60, -68, 45, 30], [-55, -68, 50, 30], [0, -68, 62, 34]].forEach(([x, y, z, s]) => {
+  const f = new THREE.Sprite(new THREE.SpriteMaterial({ map: defaultFlowerTex, transparent: true }));
+  f.position.set(x, y, z);
+  f.scale.set(s, s, 1);
+  scene.add(f);
+});
+const tipFlower = new THREE.Sprite(new THREE.SpriteMaterial({ map: defaultFlowerTex, transparent: true }));
+tipFlower.position.set(0, -50, 15);
+tipFlower.scale.set(30, 30, 1);
+scene.add(tipFlower);
 
 // Agregar tus fotos (flotan con marco dorado)
 function addPhotoFile(file) {
