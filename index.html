@@ -489,17 +489,6 @@ for (let i = 0; i < 34; i++) {
   hero.scale.set(s, s, 1);
   scene.add(hero);
 });
-// Girasoles sobre la plataforma + uno en la punta del corazón (como en la referencia)
-[[-95, -66, 20, 34], [95, -66, 10, 36], [60, -68, 45, 30], [-55, -68, 50, 30], [0, -68, 62, 34]].forEach(([x, y, z, s]) => {
-  const f = new THREE.Sprite(new THREE.SpriteMaterial({ map: defaultFlowerTex, transparent: true }));
-  f.position.set(x, y, z);
-  f.scale.set(s, s, 1);
-  scene.add(f);
-});
-const tipFlower = new THREE.Sprite(new THREE.SpriteMaterial({ map: defaultFlowerTex, transparent: true }));
-tipFlower.position.set(0, -50, 15);
-tipFlower.scale.set(30, 30, 1);
-scene.add(tipFlower);
 
 // Agregar tus fotos (flotan con marco dorado)
 function addPhotoFile(file) {
