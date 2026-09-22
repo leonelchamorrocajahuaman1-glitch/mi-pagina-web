@@ -145,26 +145,26 @@
 const CONFIG = {
   titulo: "Feliz Día de las Flores Amarillas 🌻",
   frases: [
-    "🌻 Como el girasol, siempre te busco", "🌼 Eres mi sol en cada mañana", "💛 Contigo florece todo",
-    "🌻 Tu sonrisa ilumina mi día", "🌼 Eres pura luz", "💛 Floreces en mi corazón",
-    "🌻 Gracias por llenar mi vida de color", "🌼 Un girasol para la más bonita", "💛 Eres alegría en persona",
-    "🌻 Eres mi primavera favorita", "🌼 Contigo cada día es soleado", "💛 Brillás más que mil soles",
-    "🌻 Mi flor amarilla preferida", "🌼 Que nunca te falten girasoles", "💛 Te quiero con todo mi sol",
-    "🌻 Sos la luz de mis días", "🌼 Florecer a tu lado es mi plan", "💛 Amarillo como este amor inmenso",
-    "🌻 Para ti, todos mis girasoles", "🌼 MI FLOR AMARILLA 💛"
+    "🌻 Feliz día de las flores amarillas", "🌼 Gracias por tu amistad", "💛 Los amigos son la familia que se elige",
+    "🌻 Tu amistad es un regalo", "🌼 Siempre cuentas conmigo", "💛 Que nunca te falten motivos para sonreír",
+    "🌻 Brillas con luz propia", "🌼 Gracias por estar en las buenas y en las malas", "💛 Eres una persona increíble",
+    "🌻 Los buenos amigos como tú son un tesoro", "🌼 Tu alegría contagia a todos", "💛 Que nuestra amistad dure para siempre",
+    "🌻 Celebro tenerte en mi vida", "🌼 Eres sol en días nublados", "💛 Gracias por cada risa compartida",
+    "🌻 Un girasol para un gran amigo", "🌼 Contigo todo es más divertido", "💛 Te aprecio más de lo que imaginas",
+    "🌻 Que florezcan todos tus sueños", "🌼 AMISTAD QUE FLORECE 💛"
   ],
   carta: {
-    titulo: "🌻 Para Ti, Mi Amor 🌻",
-    saludo: "Mi amor,",
+    titulo: "🌼 Para una Amistad Especial 🌼",
+    saludo: "Hola,",
     parrafos: [
-      "Hoy quiero regalarte estas flores amarillas, que significan alegría y todo lo bonito que traes a mi vida.",
-      "Como los girasoles que siempre miran al sol, yo siempre te miro a ti: eres mi luz en los días grises y mi calma en las tormentas.",
-      "Gracias por cada risa, cada momento y cada sueño que compartimos. Eres mi persona favorita en este universo.",
-      "Te amo hoy, mañana y siempre."
+      "Hoy quiero regalarte estas flores amarillas, símbolo de la alegría y la amistad verdadera.",
+      "Dicen que los amigos son la familia que uno elige, y yo te elijo todos los días: gracias por tus risas, tus consejos y por estar siempre.",
+      "Como los girasoles buscan al sol, que nunca te falte luz en tu camino. Aquí estaré para celebrar tus logros y acompañarte en los días grises.",
+      "¡Feliz día! Que nuestra amistad siga floreciendo siempre."
     ],
-    despedida: "Con todo mi amor,",
+    despedida: "Con cariño,",
     fecha: "💛 Día de las Flores Amarillas 💛",
-    firma: "Para ti, con amor 🌻"
+    firma: "tu amigo 🌻"
   }
 };
 // ======================================================================
@@ -298,7 +298,7 @@ function letterTexture(letter) {
   return new THREE.CanvasTexture(c);
 }
 const LETTER_BASE = 44;
-const letterN = new THREE.Sprite(new THREE.SpriteMaterial({ map: letterTexture('N'), transparent: true, depthWrite: false, depthTest: false }));
+const letterN = new THREE.Sprite(new THREE.SpriteMaterial({ map: letterTexture('J'), transparent: true, depthWrite: false, depthTest: false }));
 letterN.renderOrder = 10;
 letterN.position.set(0, HEART_Y * HEART_SCALE, 0);
 letterN.scale.set(LETTER_BASE, LETTER_BASE, 1);
@@ -421,7 +421,7 @@ try {
       sp.material.map = makeTextTexture(sp.userData.text, sp.userData.color);
       sp.material.needsUpdate = true;
     });
-    letterN.material.map = letterTexture('N');
+    letterN.material.map = letterTexture('J');
     letterN.material.needsUpdate = true;
   }).catch(() => {});
 } catch (e) { /* fuente no disponible, se usa la predeterminada */ }
