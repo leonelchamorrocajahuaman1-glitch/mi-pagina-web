@@ -83,12 +83,20 @@
     position: fixed; bottom: 84px; left: 0; right: 0; z-index: 10; text-align: center;
     color: rgba(255,250,205,.55); font-size: .95em; pointer-events: none;
   }
+  /* Ramo de flores decorativo abajo a la izquierda (como en la referencia) */
+  #bouquet {
+    position: fixed; left: 8px; bottom: 64px; z-index: 15; pointer-events: none;
+    font-size: 42px; line-height: 1.05; text-align: center;
+    filter: drop-shadow(0 0 10px rgba(255,180,0,.7));
+    opacity: .95;
+  }
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
 <h1 id="main-title"></h1>
 <div id="hint">Arrastra para girar · Rueda o pellizca para acercar 💫</div>
+<div id="bouquet">🌻🌻🌼<br>🌼🌻💛</div>
 
 <div id="start-screen">
   <div id="start-heart">🌻</div>
@@ -269,38 +277,46 @@ function makeGlow(size, c1, c2) {
   g.fillStyle = grad; g.fillRect(0,0,size,size);
   return new THREE.CanvasTexture(c);
 }
-const GLOW_BASE = 380;
+const GLOW_BASE = 420;
 const glow = new THREE.Sprite(new THREE.SpriteMaterial({
   map: makeGlow(768, '255,225,130', '255,170,0'), transparent: true, depthWrite: false
 }));
 glow.scale.set(GLOW_BASE, GLOW_BASE, 1);
 scene.add(glow);
 
-// Anillo de polvo dorado inclinado (polvo de estrellas orbitando)
-const dustRing = (function makeDustRing() {
-  const COUNT = 2800, R = 100, SP = 30, TILT = 1.25;
-  const pos = new Float32Array(COUNT * 3), col = new Float32Array(COUNT * 3);
-  for (let i = 0; i < COUNT; i++) {
-    const a = Math.random() * Math.PI * 2;
-    const rr = R + (((Math.random() + Math.random() + Math.random()) / 3) - 0.5) * 2 * SP;
-    const x = Math.cos(a) * rr, z0 = Math.sin(a) * rr;
-    const y0 = (Math.random() - 0.5) * 7;
-    pos[i*3]   = x;
-    pos[i*3+1] = y0 * Math.cos(TILT) - z0 * Math.sin(TILT);
-    pos[i*3+2] = y0 * Math.sin(TILT) + z0 * Math.cos(TILT);
-    const c = pickGold();
-    const dim = 0.55 + Math.random() * 0.45;
-    col[i*3] = c[0] * dim; col[i*3+1] = c[1] * dim; col[i*3+2] = c[2] * dim;
-  }
-  const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
-  const pts = new THREE.Points(g, new THREE.PointsMaterial({
-    size: 2.0, map: dotTex, vertexColors: true, transparent: true, opacity: 0.9,
-    depthWrite: false, blending: THREE.AdditiveBlending
-  }));
-  scene.add(pts);
-  return pts;
+// Anillos de polvo dorado (varias bandas elípticas orbitando, como la referencia)
+const dustRings = new THREE.Group(); scene.add(dustRings);
+const dustRingSpeeds = [];
+(function makeDustRings() {
+  const configs = [
+    { R: 92,  SP: 16, TILT: 1.32, COUNT: 1400, SIZE: 2.2, OP: 0.95 },
+    { R: 122, SP: 26, TILT: 1.22, COUNT: 1600, SIZE: 2.0, OP: 0.85 },
+    { R: 155, SP: 34, TILT: 1.12, COUNT: 1200, SIZE: 1.8, OP: 0.7 }
+  ];
+  configs.forEach((cfg, ci) => {
+    const pos = new Float32Array(cfg.COUNT * 3), col = new Float32Array(cfg.COUNT * 3);
+    for (let i = 0; i < cfg.COUNT; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const rr = cfg.R + (((Math.random() + Math.random() + Math.random()) / 3) - 0.5) * 2 * cfg.SP;
+      const x = Math.cos(a) * rr, z0 = Math.sin(a) * rr;
+      const y0 = (Math.random() - 0.5) * 7;
+      pos[i*3]   = x;
+      pos[i*3+1] = y0 * Math.cos(cfg.TILT) - z0 * Math.sin(cfg.TILT);
+      pos[i*3+2] = y0 * Math.sin(cfg.TILT) + z0 * Math.cos(cfg.TILT);
+      const c = pickGold();
+      const dim = 0.55 + Math.random() * 0.45;
+      col[i*3] = c[0] * dim; col[i*3+1] = c[1] * dim; col[i*3+2] = c[2] * dim;
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    const pts = new THREE.Points(g, new THREE.PointsMaterial({
+      size: cfg.SIZE, map: dotTex, vertexColors: true, transparent: true, opacity: cfg.OP,
+      depthWrite: false, blending: THREE.AdditiveBlending
+    }));
+    dustRings.add(pts);
+    dustRingSpeeds.push(0.0006 + ci * 0.0004);
+  });
 })();
 
 // Frases flotantes (doradas)
@@ -319,12 +335,12 @@ const COLORS = ['#ffd700','#ffe066','#ffcc33','#ffb347','#fff2b0','#ffaa00','#f4
 const textGroup = new THREE.Group(); scene.add(textGroup);
 function populatePhrases() {
   document.fonts.load("40px 'Indie Flower'").catch(() => {}).then(() => {
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < 220; i++) {
       const tex = makeTextTexture(CONFIG.frases[i % CONFIG.frases.length], COLORS[i % COLORS.length]);
       const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true }));
-      sp.scale.set(68, 17, 1);
+      sp.scale.set(60, 15, 1);
       const phi = Math.acos(2 * Math.random() - 1), theta = Math.random() * Math.PI * 2;
-      const r = 160 + Math.random() * 130;
+      const r = 150 + Math.random() * 150;
       sp.position.set(r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
       sp.userData = { phi, theta, radius: r, speed: 0.001 + Math.random() * 0.001 };
       textGroup.add(sp);
@@ -370,9 +386,16 @@ function orbitSprite(material, size) {
   photoGroup.add(sp);
   return sp;
 }
-for (let i = 0; i < 26; i++) {
-  orbitSprite(new THREE.SpriteMaterial({ map: defaultFlowerTex, transparent: true }), 22 + Math.random() * 16);
+for (let i = 0; i < 34; i++) {
+  orbitSprite(new THREE.SpriteMaterial({ map: defaultFlowerTex, transparent: true }), 20 + Math.random() * 24);
 }
+// Girasoles grandes decorativos en los bordes (como en la referencia)
+[[150, -50, 60, 58], [-165, 25, -30, 50], [125, 95, -85, 42], [-120, -90, 70, 44]].forEach(([x, y, z, s]) => {
+  const hero = new THREE.Sprite(new THREE.SpriteMaterial({ map: defaultFlowerTex, transparent: true }));
+  hero.position.set(x, y, z);
+  hero.scale.set(s, s, 1);
+  scene.add(hero);
+});
 
 // Agregar tus fotos (flotan con marco dorado)
 function addPhotoFile(file) {
@@ -426,7 +449,7 @@ addEventListener('touchend', () => { pinch = 0; }, { passive: true });
 let t = 0;
 (function tick() {
   requestAnimationFrame(tick); t += 0.01;
-  dustRing.rotation.y -= 0.0009; // el polvo orbita despacio
+  dustRings.children.forEach((ringPts, i) => { ringPts.rotation.y -= dustRingSpeeds[i]; }); // el polvo orbita despacio
   const hb = 1 + 0.06 * Math.sin(t * 3); // latido
   heartGroup.scale.set(hb, hb, hb);
   heartGroup.rotation.y += 0.004; // giro suave del corazón
