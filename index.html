@@ -104,16 +104,6 @@
     position: fixed; bottom: 84px; left: 0; right: 0; z-index: 10; text-align: center;
     color: rgba(255,250,205,.55); font-size: .95em; pointer-events: none; font-family: Georgia, serif;
   }
-  #bouquet {
-    position: fixed; left: 50%; transform: translateX(-50%); bottom: 66px; z-index: 15; pointer-events: none;
-    opacity: .95;
-  }
-  #bouquet img {
-    width: 112px; height: auto; display: block;
-    filter: drop-shadow(0 0 12px rgba(255,180,0,.8));
-    animation: bouquetSway 4s ease-in-out infinite; transform-origin: 50% 90%;
-  }
-  @keyframes bouquetSway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
 </style>
 </head>
 <body>
@@ -143,7 +133,6 @@
 </div>
 <input type="file" id="file-music" accept="audio/*">
 <div id="hint">Arrastra para girar · Rueda o pellizca para acercar 💫</div>
-<div id="bouquet"><img id="bouquet-img" alt="Ramo de girasoles"></div>
 
 <canvas id="c"></canvas>
 <audio id="audio" loop>
@@ -554,7 +543,6 @@ function placeOnSlot(sp, slot) {
   photoGroup.add(sp);
 }
 const bouquetTex = bouquetTexture();
-document.getElementById('bouquet-img').src = bouquetURL;
 const FLOWER_COUNT = isMobile ? 20 : 30;
 for (let i = 0; i < FLOWER_COUNT; i++) {
   const isBouquet = (i % 4 === 0); // 1 de cada 4 flores se cambia por el ramo
