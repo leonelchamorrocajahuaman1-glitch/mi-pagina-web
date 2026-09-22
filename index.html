@@ -104,6 +104,16 @@
     position: fixed; bottom: 84px; left: 0; right: 0; z-index: 10; text-align: center;
     color: rgba(255,250,205,.55); font-size: .95em; pointer-events: none; font-family: Georgia, serif;
   }
+  #bouquet {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: 66px; z-index: 15; pointer-events: none;
+    opacity: .95;
+  }
+  #bouquet img {
+    width: 112px; height: auto; display: block;
+    filter: drop-shadow(0 0 12px rgba(255,180,0,.8));
+    animation: bouquetSway 4s ease-in-out infinite; transform-origin: 50% 90%;
+  }
+  @keyframes bouquetSway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
 </style>
 </head>
 <body>
@@ -133,6 +143,7 @@
 </div>
 <input type="file" id="file-music" accept="audio/*">
 <div id="hint">Arrastra para girar · Rueda o pellizca para acercar 💫</div>
+<div id="bouquet"><img id="bouquet-img" alt="Ramo de girasoles"></div>
 
 <canvas id="c"></canvas>
 <audio id="audio" loop>
@@ -454,6 +465,80 @@ function flowerTexture() {
 const photoGroup = new THREE.Group(); scene.add(photoGroup);
 const defaultFlowerTex = flowerTexture();
 const photoGlowTex = makeGlow(512, '255,210,90', '255,170,0');
+// Ramo de girasoles en papel kraft (como el de tu imagen)
+let bouquetURL = '';
+function drawSunflowerAt(ctx, x, y, r) {
+  ctx.save(); ctx.translate(x, y);
+  ctx.shadowColor = '#FFD700'; ctx.shadowBlur = r * 0.18;
+  const petals = 13;
+  for (let i = 0; i < petals; i++) {
+    ctx.save(); ctx.rotate((i / petals) * Math.PI * 2);
+    const g = ctx.createLinearGradient(0, 0, 0, -r);
+    g.addColorStop(0, '#ffdf40'); g.addColorStop(1, '#ff9500');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.ellipse(0, -r * 0.55, r * 0.17, r * 0.42, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  const core = ctx.createRadialGradient(0, 0, r * 0.02, 0, 0, r * 0.28);
+  core.addColorStop(0, '#8a5a10'); core.addColorStop(1, '#3d2400');
+  ctx.fillStyle = core;
+  ctx.beginPath(); ctx.arc(0, 0, r * 0.27, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+function bouquetTexture() {
+  const S = 512;
+  const c = document.createElement('canvas'); c.width = c.height = S;
+  const ctx = c.getContext('2d');
+  // tallos
+  ctx.strokeStyle = '#3f7a2e'; ctx.lineWidth = 10; ctx.lineCap = 'round';
+  [[256,150],[160,140],[352,140],[128,240],[384,240]].forEach(([x, y]) => {
+    ctx.beginPath(); ctx.moveTo(256, 498); ctx.quadraticCurveTo(256, 370, x, y + 50); ctx.stroke();
+  });
+  // hojas
+  ctx.fillStyle = '#4c8a35';
+  [[196,392,-0.7],[316,392,0.7],[172,330,-1.0],[340,330,1.0],[256,440,0.15]].forEach(([x, y, a]) => {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(a);
+    ctx.beginPath(); ctx.ellipse(0, 0, 24, 50, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  });
+  // papel kraft (cono)
+  ctx.fillStyle = '#c9a06a';
+  ctx.beginPath(); ctx.moveTo(118, 298); ctx.lineTo(394, 298); ctx.lineTo(302, 498); ctx.lineTo(210, 498); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(120,80,30,.45)'; ctx.lineWidth = 4;
+  for (let i = 0; i < 5; i++) {
+    ctx.beginPath(); ctx.moveTo(150 + i * 52, 308); ctx.lineTo(226 + i * 15, 488); ctx.stroke();
+  }
+  // borde superior del papel
+  ctx.fillStyle = '#b78e55';
+  ctx.beginPath(); ctx.moveTo(118, 298); ctx.lineTo(394, 298); ctx.lineTo(378, 330); ctx.lineTo(134, 330); ctx.closePath(); ctx.fill();
+  // moño de cuerda
+  ctx.strokeStyle = '#8a6234'; ctx.lineWidth = 9;
+  ctx.beginPath(); ctx.ellipse(214, 398, 34, 22, -0.4, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(298, 398, 34, 22, 0.4, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(256, 414); ctx.lineTo(240, 462); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(256, 414); ctx.lineTo(272, 462); ctx.stroke();
+  ctx.fillStyle = '#8a6234';
+  ctx.beginPath(); ctx.arc(256, 400, 13, 0, Math.PI * 2); ctx.fill();
+  // florecitas blancas de relleno
+  [[150,230],[362,230],[205,118],[307,118],[118,300],[394,300]].forEach(([x, y]) => {
+    ctx.fillStyle = '#fffdf5';
+    for (let p = 0; p < 5; p++) {
+      const a = (p / 5) * Math.PI * 2;
+      ctx.beginPath(); ctx.arc(x + Math.cos(a) * 9, y + Math.sin(a) * 9, 7, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.fillStyle = '#ffcc33';
+    ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#fffdf5';
+  });
+  // girasoles al frente
+  drawSunflowerAt(ctx, 256, 175, 92);
+  drawSunflowerAt(ctx, 152, 132, 64);
+  drawSunflowerAt(ctx, 360, 132, 64);
+  drawSunflowerAt(ctx, 122, 238, 56);
+  drawSunflowerAt(ctx, 390, 238, 56);
+  bouquetURL = c.toDataURL('image/png');
+  return new THREE.CanvasTexture(c);
+}
 function orbitSlot() {
   const phi = Math.acos(2 * Math.random() - 1), theta = Math.random() * Math.PI * 2;
   const r = 150 + Math.random() * 200;
@@ -468,10 +553,13 @@ function placeOnSlot(sp, slot) {
   sp.userData = slot;
   photoGroup.add(sp);
 }
+const bouquetTex = bouquetTexture();
+document.getElementById('bouquet-img').src = bouquetURL;
 const FLOWER_COUNT = isMobile ? 20 : 30;
 for (let i = 0; i < FLOWER_COUNT; i++) {
-  const size = 20 + Math.random() * 22;
-  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: defaultFlowerTex, transparent: true }));
+  const isBouquet = (i % 4 === 0); // 1 de cada 4 flores se cambia por el ramo
+  const size = isBouquet ? 44 + Math.random() * 16 : 20 + Math.random() * 22;
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: isBouquet ? bouquetTex : defaultFlowerTex, transparent: true }));
   sp.scale.set(size, size, 1);
   placeOnSlot(sp, orbitSlot());
 }
