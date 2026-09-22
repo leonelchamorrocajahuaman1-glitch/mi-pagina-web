@@ -99,7 +99,7 @@
     padding: 8px 16px; backdrop-filter: blur(4px); text-shadow: 0 0 6px #FFD700;
   }
   #toolbar button:hover { background: rgba(255,180,0,.30); }
-  #toolbar input[type="file"], #file-music { display: none; }
+  #toolbar input[type="file"] { display: none; }
   #hint {
     position: fixed; bottom: 84px; left: 0; right: 0; z-index: 10; text-align: center;
     color: rgba(255,250,205,.55); font-size: .95em; pointer-events: none; font-family: Georgia, serif;
@@ -131,7 +131,6 @@
   <button id="btn-photos" title="Agregar tus fotos">📷</button>
   <input type="file" id="file-photos" accept="image/*" multiple>
 </div>
-<input type="file" id="file-music" accept="audio/*">
 <div id="hint">Arrastra para girar · Rueda o pellizca para acercar 💫</div>
 
 <canvas id="c"></canvas>
@@ -665,6 +664,7 @@ startScreen.addEventListener('click', () => {
   if (started) return; started = true;
   startScreen.classList.add('hidden');
   setTimeout(() => { startScreen.style.display = 'none'; }, 1100);
+  audio.load();
   audio.play().catch(() => {});
 });
 const letterBtn = document.getElementById('love-letter-btn');
@@ -673,13 +673,16 @@ document.getElementById('love-letter-close').addEventListener('click', () => let
 letterBtn.addEventListener('click', () => letterOverlay.classList.add('visible'));
 letterOverlay.addEventListener('click', (e) => { if (e.target === letterOverlay) letterOverlay.classList.remove('visible'); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') letterOverlay.classList.remove('visible'); });
-const fileMusic = document.getElementById('file-music');
 const filePhotos = document.getElementById('file-photos');
-document.getElementById('btn-music').addEventListener('click', () => fileMusic.click());
-document.getElementById('btn-photos').addEventListener('click', () => filePhotos.click());
-fileMusic.addEventListener('change', () => {
-  if (fileMusic.files[0]) { audio.src = URL.createObjectURL(fileMusic.files[0]); audio.play().catch(() => {}); }
+const btnMusic = document.getElementById('btn-music');
+function syncMusicIcon() { btnMusic.textContent = audio.paused ? '🎵' : '🔊'; }
+audio.addEventListener('play', syncMusicIcon);
+audio.addEventListener('pause', syncMusicIcon);
+btnMusic.addEventListener('click', () => {
+  if (audio.paused) { audio.load(); audio.play().catch(() => {}); }
+  else audio.pause();
 });
+document.getElementById('btn-photos').addEventListener('click', () => filePhotos.click());
 filePhotos.addEventListener('change', () => {
   [...filePhotos.files].slice(0, 10).forEach(addPhotoFile);
   filePhotos.value = '';
